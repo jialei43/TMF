@@ -1,3 +1,5 @@
+import time
+
 import requests
 
 if __name__ == "__main__":
@@ -22,6 +24,8 @@ if __name__ == "__main__":
         try:
             # 3. 构造请求数据
             input_data = {"text": user_input}
+            # 计时
+            start_time = time.time()
 
             # 4. 调用 Flask API
             response = requests.post(
@@ -29,6 +33,9 @@ if __name__ == "__main__":
                 json=input_data,
                 timeout=5  # 设置超时保护
             )
+            # 获取处理时间（转换为毫秒）time.time()得到的是秒
+            cost_time_ms = (time.time() - start_time)
+            print(f"✅ 处理时间：{cost_time_ms:.2f} 毫秒")
 
             # 5. 解析结果
             response.raise_for_status()

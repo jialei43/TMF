@@ -21,5 +21,15 @@ class Config():
 
         self.rf_model_predict_result = r"../02-random_forest/result"
 
+        # fasttext数据路径
+        self.train_ft_char_path = r"../03-fasttext/data/train_char.txt"
+        self.test_ft_char_path = r"../03-fasttext/data/test_char.txt"
+        self.dev_ft_char_path = r"../03-fasttext/data/dev_char.txt"
+
+        self.train_ft_jieba_path = r"../03-fasttext/data/train_jieba.txt"
+        self.test_ft_jieba_path = r"../03-fasttext/data/test_jieba.txt"
+        self.dev_ft_jieba_path = r"../03-fasttext/data/dev_jieba.txt"
+        self.ft_model_save_path = r"../03-fasttext/save_models"
+
 
 

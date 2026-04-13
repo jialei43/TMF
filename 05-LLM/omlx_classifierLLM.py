@@ -1,6 +1,7 @@
 import os
 import json
 import pandas as pd
+from sklearn.metrics import classification_report
 from tenacity import stop_after_attempt, wait_fixed, retry
 
 from src.config.bert_config import Config
@@ -118,9 +119,12 @@ if __name__ == '__main__':
 
     # 输出结果对比
     print("\n" + "=" * 30)
+    pre_labels = []
     for i, result in enumerate(results):
         pred_label = result.get("category", "社会")
+        pre_labels.append(REVERSE_LABEL_MAPPING.get(pred_label,5))
         true_label = LABEL_MAPPING[test_labels[i]]
+
 
         if pred_label == true_label:
             correct_count += 1
@@ -129,6 +133,16 @@ if __name__ == '__main__':
         print(f"预测：{pred_label} | 真实：{true_label}")
         print(f"原因：{result.get('reason', 'N/A')}")
         print("-" * 20)
+
+    # 评估性能
+    print("\n评估指标：")
+    report = classification_report(
+        pre_labels,
+        test_labels,
+        # target_names=[LABEL_MAPPING[i] for i in range(10)],
+        digits=4
+    )
+    print(report)
 
     acc = correct_count / total_num
     print(f"\n测试集准确率：{acc:.2%}")

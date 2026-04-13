@@ -22,13 +22,14 @@ class DataLoaderCls():
             max_length=self.conf.padding_size,
             padding="max_length",
             truncation=True,
-            return_tensors="pt")
+            return_tensors="pt" # 返回张量
+         )
 
-        token_ids_list = text_tokens["input_ids"]
-        toekn_attention_mask_list = text_tokens["attention_mask"]
+        token_ids_list = text_tokens["input_ids"].to(self.conf.device)
+        toekn_attention_mask_list = text_tokens["attention_mask"].to(self.conf.device)
         # 转换为Tensor并添加到设备
-        token_ids_list = torch.tensor(token_ids_list, device=self.conf.device)
-        toekn_attention_mask_list = torch.tensor(toekn_attention_mask_list, device=self.conf.device)
+        # token_ids_list = torch.tensor(token_ids_list, device=self.conf.device)
+        # toekn_attention_mask_list = torch.tensor(toekn_attention_mask_list, device=self.conf.device)
         lables = torch.tensor(lables, device=self.conf.device)
 
         return token_ids_list, toekn_attention_mask_list, lables

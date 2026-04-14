@@ -26,13 +26,18 @@ if __name__ == '__main__':
     # 检查量化模型中各层的参数数据类型
     print(quantize_dynamic_model)
 
-    # 测试量化后的模型
-    report,f1score,accuracy,precision = evaluate(quantize_dynamic_model, test_dataloader, conf)
-    print("Test Classification Report:", report)
-    print("Test F1:", f1score)
-    print("Test Accuracy:", accuracy)
-    print("Test Precision:", precision)
 
-    # 保存整个量化模型
-    torch.save(quantize_dynamic_model, conf.quantize_model_save_path)
-    print("保存量化模型成功！保存路径为：", conf.quantize_model_save_path)
+    # 测试量化后的模型
+    # report,f1score,accuracy,precision = evaluate(quantize_dynamic_model, test_dataloader, conf)
+    # print("Test Classification Report:", report)
+    # print("Test F1:", f1score)
+    # print("Test Accuracy:", accuracy)
+    # print("Test Precision:", precision)
+    #
+    # # 保存整个量化模型
+    # torch.save(quantize_dynamic_model, conf.quantize_model_save_path)
+    # print("保存量化模型成功！保存路径为：", conf.quantize_model_save_path)
+
+    load = torch.load(conf.quantize_model_save_path, weights_only=False,  # 必须设置为 False
+                      map_location=conf.device)
+    print(load)

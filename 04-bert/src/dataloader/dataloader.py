@@ -7,7 +7,7 @@ from src.dataloader.reader import load_row_data
 
 
 class DataLoaderCls():
-    def __init__(self, conf= Config):
+    def __init__(self, conf= Config()):
         self.conf = conf
 
     def collate_fn(self, batch):

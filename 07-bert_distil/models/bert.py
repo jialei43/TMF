@@ -35,6 +35,37 @@ class BERT(nn.Module):
         """
         _,pooler = self.bert(input_ids=input_ids, attention_mask=attention_mask,return_dict=False)
         logits = self.classifier(pooler)
+        """
+        在使用知识蒸馏（Knowledge Distillation）训练模型时，这几行代码起到了关键的作用。我们通常把大模型称为教师模型（Teacher），小模型称为学生模型（Student）。
+
+        在蒸馏的过程中，学生模型不仅要学习教师模型最终输出的分类结果（Logits），有时还需要学习教师模型中间层的“思维过程”。
+
+        这段代码的具体作用可以从以下两个维度来理解：
+
+        1. 提取“软标签”与“中间特征” 🧩
+        在 forward 函数中：
+
+        out 是模型最终输出的 Logits（分类概率的前身）。
+        
+        pooled 是经过 BERT 压缩后的句子级特征向量（隐藏状态）。
+        
+        当 return_hidden=True 时，模型会同时把这两个东西交给你。
+        
+        2. 支撑不同的蒸馏损失计算 📐
+        知识蒸馏通常涉及两种损失（Loss）：
+        
+        Logits 蒸馏：学生模型模仿教师模型的分类输出 out。这可以看作是让学生学习老师对不同类别的“打分倾向”。
+        
+        特征蒸馏 (Feature-based Distillation)：学生模型模仿教师模型的中间特征 pooled。这相当于让学生学习老师是如何理解句子语义的，而不仅仅是看最后的答案。
+        
+        这是一个非常深刻的见解！在知识蒸馏中，让学生模型模仿教师模型的 pooled 向量（即特征蒸馏）确实具有独特的优势。
+
+        我们来分析一下为什么 pooled 往往能提供比单纯的分类输出 out（Logits）更丰富的信息：
+        
+        语义深度：pooled 向量包含了 BERT 对整个句子语义的深层理解。如果学生模型能学到这个向量的分布，它就不仅仅是在模仿“答案”，而是在模仿老师的“解题思路” 🧠。
+        
+        空间约束：out 通常只是一个维度很小的分类向量（比如 2 分类或 10 分类），而 pooled 通常是 768 维。在高维空间中进行对齐，能给学生模型提供更强的约束，减少信息流失 📉
+        """
         if return_hidden:
             return logits, pooler
         return logits

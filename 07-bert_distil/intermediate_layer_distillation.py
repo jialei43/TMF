@@ -135,7 +135,7 @@ def model_train(teacher_model, student_model, train_loader, dev_loader, num_epoc
             step_duration = time.time() - step_start_time
 
             # 每10个step验证一次
-            if step % 500 == 0:
+            if step % 200 == 0:
                 # 切换到评估模式
                 student_model.eval()
                 # 平均loss
@@ -151,6 +151,18 @@ def model_train(teacher_model, student_model, train_loader, dev_loader, num_epoc
                 print(report)
                 # 学生模型切换回训练模式
                 student_model.train()
+                # 保存最佳模型并检查早停
+                if f1score > best_dev_f1:
+                    best_dev_f1 = f1score
+                    torch.save(student_model.state_dict(), save_path)
+                    print("模型保存！")
+                    epochs_no_improve = 0
+                else:
+                    epochs_no_improve += 1
+                    print(f"dev f1未提升，当前未提升epoch数：{epochs_no_improve} / {patience}")
+                    if epochs_no_improve >= patience:
+                        print(f"早停触发！ dev f1 在{patience} 个epoch内未提升，停止训练。")
+                        break
 
         # 计算训练集指标
         train_report = classification_report(train_labels, train_preds, target_names=lstmConf.class_List,

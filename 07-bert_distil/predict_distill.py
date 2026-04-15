@@ -23,7 +23,7 @@ def predict_distilled(texts,model_path=None,device=None):
     device = device if device else lstmConf.device
 
     # 设置模型路径
-    model_path = os.path.join(lstmConf.distill_model_save_path,"intermediate_layer_distill_model20250612.pt")
+    model_path = os.path.join(lstmConf.distill_model_save_path,"soft_distill_model20260415.pt")
 
     # 加载模型
     model = BiLstmClassifier()
@@ -43,7 +43,7 @@ def predict_distilled(texts,model_path=None,device=None):
     attention_mask_list = []
 
     # 分词并编码，添加[CLS]和[SEP]，不填充
-    encoded = tokenizer.encode_plus(
+    encoded = tokenizer(
         texts,
         add_special_tokens=True,
         max_length=512,
@@ -78,7 +78,7 @@ def predict_distilled(texts,model_path=None,device=None):
         # 获取类别id
         class_idx = pred.item()
         #映射到类别名称
-        class_name = lstmConf.class_list[class_idx]
+        class_name = lstmConf.class_List[class_idx]
         # 预测类别的概率
         class_prob = prob[class_idx].item()
         results.append({
@@ -90,7 +90,7 @@ def predict_distilled(texts,model_path=None,device=None):
     return results
 
 if __name__=="__main__":
-    sample_text = "体验2D巅峰 倚天屠龙记十大创新概览"
+    sample_text = "团伙3个月连环盗车20辆被抓获"
 
     # 进行预测
     results = predict_distilled(sample_text)

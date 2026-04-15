@@ -49,7 +49,7 @@ class Config():
         #类别数
         self.num_classes = len(self.class_List)
         # epoch数
-        self.num_epochs = 5
+        self.num_epochs = 10
         # mini-batch 大小
         self.batch_size = 128
         # 每句话处理的长度（短填长切）

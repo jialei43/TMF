@@ -57,7 +57,7 @@ def model_train(teacher_model, student_model, train_loader, dev_loader, num_epoc
     # 训练步数计数器
     step = 0
     # 早停耐心值patience 3
-    patience = 1
+    patience = 5
 
     # 记录未提升的 epoch 数
     epochs_no_improve = 0

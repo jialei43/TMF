@@ -82,6 +82,6 @@ def train(kd_type):
 if __name__ == "__main__":
     start_time = time.time()
     # 蒸馏类型：hard,soft,inter
-    kd_type = "inter"
+    kd_type = "soft"
     train(kd_type)
     print(f"Training complete in {get_time_dif(start_time)}")
